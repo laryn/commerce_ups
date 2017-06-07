@@ -85,41 +85,13 @@ material, then you may want to adjust product dimensions accordingly.
 7. Doesn't include support for shipping markups. If you'd like to add a shipping 
 markup, use Rules Components.
 
-
-## Methodology
-
-Calculating estimated shipping costs is a tricky business, and it can get 
-really complicated really quickly. Knowing this, we purposely designed this 
-module with simplicity in mind. Here's how it works:
-
-1. Every order must contain at least one package.
-
-2. The number of packages is determined by calculating the total volume of all 
-products in the order, dividing by the volume of the default package size, 
-and rounding up.
-
-3. The weight of each package is determined by dividing the total weight of all 
-products in the order by the number of packages.
-
-If you need custom functionality, you have several options:
-
-1. Determine if it is something that can be generalized to suit a number of 
-users and submit it via the issue queue as a suggestion for inclusion in 
-this module.
-
-2. Hire one of the maintainers to create a custom module that interfaces with 
-Commerce UPS to add your custom functionality.
-
-3. Break open a text editor and start coding your own custom module.
-
-
 ## Authors/Maintainers/Contributors
 
-Frank Lakatos - http://drupal.org/user/834502
-Chris Calip - http://drupal.org/user/210499
-Ryan Szrama - http://drupal.org/user/49344
-Andrew Riley - http://drupal.org/user/98079
-Michael Anello - http://drupal.org/user/51132
+- Frank Lakatos - http://drupal.org/user/834502
+- Chris Calip - http://drupal.org/user/210499
+- Ryan Szrama - http://drupal.org/user/49344
+- Andrew Riley - http://drupal.org/user/98079
+- Michael Anello - http://drupal.org/user/51132
 
 A good portion of this module was originally written during the 
 DrupalCamp Atlanta 2011 code sprint. Thanks to all who participated 
