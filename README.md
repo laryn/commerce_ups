@@ -1,10 +1,13 @@
-- - - - - About this module
+# About this module
 
 Commerce UPS module provides real-time shipping cost estimates for 
 United Parcel Service (UPS).
 
+**This is a patched version of 7.x-2.x-dev, which incorporates a better
+packing algorithm than the default module uses.**
 
-- - - - - Dependencies
+
+## Dependencies
 
 Obviously, this module depends on the Commerce module 
 (http://www.drupal.org/project/commerce). In addition, the following modules 
@@ -17,16 +20,20 @@ of each product. This information is necessary to determine a shipping estimate.
 * Commerce Shipping - http://www.drupal.org/project/commerce_shipping
 This provides the infrastructure for Commerce UPS to fully integrate with the 
 Commerce module.
-You must use the commerce_shiping 2.x!
+You must use the commerce_shipping 2.x!
+
+* Commerce Packing - https://github.com/laryn/commerce_packing
+This provides a better packing algorithm for Commerce UPS, useful for stores that
+sell small and large items to get a more reliable shipping cost.
 
 
-- - - - - Optional modules
+## Optional modules
 
 * AES - http://www.drupal.org/project/aes
 This module is strongly suggested in order to securely store the site's 
 UPS credentials. 
 
-- - - - - Installation
+## Installation
 
 1. Install and enable the module and all dependencies (be sure to use the 
 latest versions of everything). Add dimensions and weight fields (new field 
@@ -49,7 +56,7 @@ via https://www.ups.com/upsdeveloperkit.
 credentials secure.
 
 
-- - - - - Limitations
+## Limitations
 
 Eventually, all of these limitations may be addressed. For now, be warned.
 
@@ -79,7 +86,7 @@ material, then you may want to adjust product dimensions accordingly.
 markup, use Rules Components.
 
 
-- - - - - Methodology
+## Methodology
 
 Calculating estimated shipping costs is a tricky business, and it can get 
 really complicated really quickly. Knowing this, we purposely designed this 
@@ -106,7 +113,7 @@ Commerce UPS to add your custom functionality.
 3. Break open a text editor and start coding your own custom module.
 
 
-- - - - - Authors/Maintainers/Contributors
+## Authors/Maintainers/Contributors
 
 Frank Lakatos - http://drupal.org/user/834502
 Chris Calip - http://drupal.org/user/210499
