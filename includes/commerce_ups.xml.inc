@@ -48,28 +48,8 @@ function commerce_ups_build_rate_request($order) {
 
   $ups_pickupschedule = variable_get('commerce_ups_pick_up_schedule');
 
-  // This returns $weight['unit'] and $weight['weight'].
-  $weight = commerce_physical_order_weight($order, 'lb');
-  // This returns $volume['unit'] and $weight['volume'].
-  $volume = commerce_physical_order_volume($order, 'in');
-  $default_package_volume = variable_get('commerce_ups_default_package_size_length', '0') * variable_get('commerce_ups_default_package_size_width', '0') * variable_get('commerce_ups_default_package_size_height', '0');
-
-  /* If there is no default package volume, we cannot calculate the number of packages and there is no reason to send to UPS */
-
-  if ($default_package_volume == 0) {
-    drupal_set_message(t('There was an error with the UPS configuration.'), 'error', FALSE);
-    watchdog('commerce_ups', 'The default measurements for the commerce_ups module is empty or is set to zero. Please set the default package dimensions in the settings page for the commerce_ups module. Without the default measurements this module cannot calculate the number of packages and UPS rates will not be displayed.', array(), WATCHDOG_ALERT);
-    return FALSE;
-  }
-
-  /* If there is no total volume or weight for the order, there is no reason to send the request to UPS */
-
-  if ($volume['volume'] == NULL || $weight['weight'] == NULL) {
-    return FALSE;
-  }
-
-  $number_of_packages = ceil($volume['volume'] / $default_package_volume);
-
+  $packages = commerce_packing_get_packages($order);
+  
   /* Pickup Schedule */
 
   $schedule_code = variable_get('commerce_ups_pick_up_schedule');
@@ -121,23 +101,18 @@ function commerce_ups_build_rate_request($order) {
   $shipfrom_address->CountryCode = variable_get('commerce_ups_country_code', '');
   $shipfrom->ResidentialAddressIndicator = '';
 
-  $package_number = 1;
-  for ($i = 1; $package_number <= $number_of_packages; $i++) {
+  // Loop through the packages that were previously calculated & add them to the request.
+  foreach($packages AS $current_package) {  
     $package = $shipment->addChild('Package');
     $package->PackagingType->Code = variable_get('commerce_ups_packaging', '02');
     $dimensions = $package->addChild('Dimensions');
     $dimensions->UnitOfMeasurement->Code = 'IN';
-    $dimensions->Length = variable_get('commerce_ups_default_package_size_length', '0');
-    $dimensions->Width = variable_get('commerce_ups_default_package_size_width', '0');
-    $dimensions->Height = variable_get('commerce_ups_default_package_size_height', '0');
+    $dimensions->addChild('Length', round($current_package['dimensions']['length']));
+    $dimensions->addChild('Width', round($current_package['dimensions']['width']));
+    $dimensions->addChild('Height', round($current_package['dimensions']['height']));
     $package_weight = $package->addChild('PackageWeight');
     $package_weight->UnitOfMeasurement->Code = 'LBS';
-    /* If the weight is less than 0.1, set it to 0.1. I tried to find some "official" documentation
-     *   for this on the UPS site, but could not. I did find that other ecommerce platforms are
-     *   using this same logic though, I think it is safe for now. mta
-     */
-    $package_weight->Weight = max(array(0.1, $weight['weight'] / $number_of_packages));
-    $package_number++;
+    $package_weight->addChild('Weight', $current_package['weight']['weight']);
   }
 
   // Allow other modules to alter the rate request.

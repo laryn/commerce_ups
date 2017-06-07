@@ -6,6 +6,7 @@ core = 7.x
 dependencies[] = commerce
 dependencies[] = commerce_shipping
 dependencies[] = commerce_physical
+dependencies[] = commerce_packing
 
 ; Simple tests
 files[] = tests/commerce_ups.test
